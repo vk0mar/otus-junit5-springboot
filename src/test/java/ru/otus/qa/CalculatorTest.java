@@ -29,4 +29,47 @@ class CalculatorTest {
 
         assertEquals(8, result);
     }
+    @Test
+    void testMinus() {
+        int result = get("/calc?operation=minus&a=5&b=3").then().statusCode(200)
+                .assertThat().log().all()
+                .extract().body().as(Integer.class);
+
+        assertEquals(2, result);
+    }
+    @Test
+    void testMultiply() {
+        int result = get("/calc?operation=multiply&a=5&b=3").then().statusCode(200)
+                .assertThat().log().all()
+                .extract().body().as(Integer.class);
+
+        assertEquals(15, result);
+    }
+    @Test
+    void testDivide() {
+        int result = get("/calc?operation=divide&a=5&b=3").then().statusCode(200)
+                .assertThat().log().all()
+                .extract().body().as(Integer.class);
+
+        assertEquals(1, result);
+    }
+    @Test
+    void testUnknown() {
+
+            String result = get("/calc?operation=Unknown&a=5&b=3").then().statusCode(500)
+                    .assertThat().log().all()
+                    .extract().body().asString();
+    }
+    @Test
+    void testDivideZero() {
+        String result = get("/calc?operation=divide&a=5&b=0").then().statusCode(500)
+                .assertThat().log().all()
+                .extract().body().asString();
+    }
+    @Test
+    void testMultiplyA() {
+        String result = get("/calc?operation=multiply&a=5000000000&b=3000000000").then().statusCode(400)
+                .assertThat().log().all()
+                .extract().body().asString();
+    }
 }
